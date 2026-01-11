@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-RUN pip install confluent-kafka cassandra-driver
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY iot_producer.py .
 COPY iot_consumer.py .
