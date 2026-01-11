@@ -2,11 +2,14 @@ import json
 import random
 import time
 import uuid
+import os
 from confluent_kafka import Producer
+
+KAFKA_BOOTSTRAP = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 
 # Kafka Producer configuration
 CFG = {
-    'bootstrap.servers': 'localhost:9092',
+    'bootstrap.servers': KAFKA_BOOTSTRAP,
     'acks': '0',
     'linger.ms': 10,
     'compression.type': 'snappy'

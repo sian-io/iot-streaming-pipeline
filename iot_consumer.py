@@ -1,18 +1,22 @@
 import json
 import time
+import os
 from confluent_kafka import Consumer, KafkaError
-from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
-from cassandra.policies import DCAwareRoundRobinPolicy
-from cassandra.query import dict_factory
+from cassandra.cluster import Cluster
 from uuid import UUID
+
+KAFKA_BOOTSTRAP = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+
+CASSANDRA_HOST = os.getenv('CASSANDRA_HOST', 'localhost')
 
 # Kafka Consumer configuration
 CFG = {
-    'bootstrap.servers': 'localhost:9092',
+    'bootstrap.servers': KAFKA_BOOTSTRAP,
     'group.id': 'iot_data_consumers',
     'auto.offset.reset': 'earliest'
 }
-CASSANDRA_NODES = ['localhost'] # port 9042 is default
+
+CASSANDRA_NODES = [CASSANDRA_HOST] # port 9042 is default
 
 def connect_cassandra():
     print("Connecting to Cassandra...")
