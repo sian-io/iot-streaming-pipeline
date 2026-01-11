@@ -78,7 +78,7 @@ services:
       cassandra:
         condition: service_healthy
     volumes:
-      - ./init.cql:/init.cql
+      - ./infra/cassandra/init.cql:/init.cql
     networks:
       - iot_net
     command: >
@@ -86,8 +86,8 @@ services:
   
   producer:
     build:
-      context: .
-      dockerfile: Dockerfile.app
+      context: ./app
+      dockerfile: Dockerfile
     container_name: producer
     networks:
       - iot_net
@@ -101,8 +101,8 @@ services:
 
   consumer:
     build:
-      context: .
-      dockerfile: Dockerfile.app
+      context: ./app
+      dockerfile: Dockerfile
     # No container_name to allow scaling
     networks:
       - iot_net
