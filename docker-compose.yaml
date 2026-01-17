@@ -16,7 +16,7 @@ services:
       # 3. EXTERNAL: for localhost access (port 9092)
       KAFKA_LISTENERS: INTERNAL://0.0.0.0:9094,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
       
-      # Advertised Listeners (The "public" address that Kafka advertises)
+      # Advertised Listeners
       # - Clients connecting on port 9094 should use the address 'kafka:9094'
       # - Clients connecting on port 9092 should use the address 'localhost:9092'
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9094,EXTERNAL://localhost:9092
@@ -30,14 +30,20 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      
+      # Memory limits to control hardware usage
+      KAFKA_HEAP_OPTS: "-Xms512M -Xmx512M"
+
+      # 12 partitions per topic for equal distribution across 1, 2, 3, 4, 6 or 12 consumers
+      KAFKA_NUM_PARTITIONS: 12
     networks:
       - iot_net
     healthcheck:
       test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9094 --list"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 20s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
   
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -62,15 +68,20 @@ services:
       - CASSANDRA_CLUSTER_NAME=iot_cluster
       - CASSANDRA_DC=datacenter1
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      
+      # Limiting JVM memory, but not too much to avoid message dropping
+      - MAX_HEAP_SIZE=1024M
+      - HEAP_NEWSIZE=256M
     volumes:
       - cassandra_data:/var/lib/cassandra
     networks:
       - iot_net
     healthcheck:
       test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES'"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
+      start_period: 40s
     
   init-cassandra:
     image: cassandra:4.1
