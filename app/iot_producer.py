@@ -58,13 +58,13 @@ def main():
 
             msg_count += 1
 
-            # Throttle to control message rate for the single node kafka cluster
-            time.sleep(.00025)  # 250 microseconds
+            # Small throttle to control hardware usage
+            time.sleep(.000285)
 
             # Log status every 1000 messages
-            if msg_count % 1000 == 0:
+            if msg_count % 10000 == 0:
                 elapsed = time.time() - cycle_start_time
-                rate = 1000 / elapsed
+                rate = 10000 / elapsed
                 print(f'Status: {msg_count} messages sent. Rate: {rate:.2f} msgs/sec')                
                 cycle_start_time = time.time()
     
