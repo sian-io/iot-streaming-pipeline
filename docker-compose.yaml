@@ -104,6 +104,7 @@ services:
       - iot_net
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9094
+      - PRODUCER_TARGET_RATE=3500  # Target messages per second
     depends_on:
       kafka:
         condition: service_healthy

@@ -33,10 +33,14 @@ def generate_sensor_reading(sensor_id):
 def main():
     producer = Producer(CFG)
 
-    # Simulating 100 different sensors
-    sensor_ids = [str(uuid.uuid4()) for _ in range(100)]
+    # Gets the environment variable for target msg rate or defaults to 3500 msgs/sec
+    target_msg_rate = int(os.getenv('PRODUCER_TARGET_RATE', '3500'))
+    sleep_time = 1.0 / target_msg_rate if target_msg_rate > 0 else 0
 
-    print('Initiating data production...')
+    # Simulating 1000 different sensors
+    sensor_ids = [str(uuid.uuid4()) for _ in range(1000)]
+
+    print(f'Initiating data production at {target_msg_rate} messages per second...')
     try:
         msg_count = 0
         cycle_start_time = time.time()
@@ -58,10 +62,10 @@ def main():
 
             msg_count += 1
 
-            # Small throttle to control hardware usage
-            time.sleep(.000285)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
-            # Log status every 1000 messages
+            # Log status every 10000 messages
             if msg_count % 10000 == 0:
                 elapsed = time.time() - cycle_start_time
                 rate = 10000 / elapsed
