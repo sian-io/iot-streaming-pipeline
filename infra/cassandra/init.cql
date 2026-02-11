@@ -5,9 +5,9 @@ USE iot_data;
 
 CREATE TABLE IF NOT EXISTS sensor_readings (
     sensor_id UUID,
+    type TEXT,
     reading_time TIMESTAMP,
-    temperature FLOAT,
-    humidity FLOAT,
+    reading FLOAT,
 
     -- PRIMARY KEY:
     PRIMARY KEY ((sensor_id), reading_time)

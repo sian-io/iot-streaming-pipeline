@@ -28,7 +28,7 @@ def connect_cassandra():
 
     # Prepared statement
     query = """
-    INSERT INTO sensor_readings (sensor_id, reading_time, temperature, humidity)
+    INSERT INTO sensor_readings (sensor_id, reading_time, type, reading)
     VALUES (?, ?, ?, ?)
     """
     prepared = session.prepare(query)
@@ -73,9 +73,9 @@ def main():
                     prepared,
                     [
                         sensor_id,
-                        payload['timestamp'],
-                        payload['temperature'],
-                        payload['humidity']
+                        payload['reading_time'],
+                        payload['type'],
+                        payload['reading']
                     ]
                 )
 
