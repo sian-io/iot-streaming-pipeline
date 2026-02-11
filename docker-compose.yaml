@@ -6,36 +6,36 @@ services:
       - "9092:9092"
     environment:
       # KRaft mode configuration
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       
       # Listeners
       # 1. CONTROLLER: for internal controller communication (port 9093)
       # 2. INTERNAL: for inter-broker communication (port 9094)
       # 3. EXTERNAL: for localhost access (port 9092)
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9094,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9094,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
       
       # Advertised Listeners
       # - Clients connecting on port 9094 should use the address 'kafka:9094'
       # - Clients connecting on port 9092 should use the address 'localhost:9092'
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9094,EXTERNAL://localhost:9092
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9094,EXTERNAL://localhost:9092
       
       # Security Protocol Mapping (Protocol used on each Listener)
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
 
       # Single node configuration
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
       
       # Memory limits to control hardware usage
-      KAFKA_HEAP_OPTS: "-Xms512M -Xmx512M"
+      - KAFKA_HEAP_OPTS="-Xms512M -Xmx512M"
 
       # 12 partitions per topic for equal distribution across 1, 2, 3, 4, 6 or 12 consumers
-      KAFKA_NUM_PARTITIONS: 12
+      - KAFKA_NUM_PARTITIONS=12
     networks:
       - iot_net
     healthcheck:
