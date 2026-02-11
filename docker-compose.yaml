@@ -40,10 +40,10 @@ services:
       - iot_net
     healthcheck:
       test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9094 --list"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
   
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -80,8 +80,8 @@ services:
       test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES'"]
       interval: 10s
       timeout: 10s
-      retries: 10
-      start_period: 40s
+      retries: 5
+      start_period: 60s
     
   init-cassandra:
     image: cassandra:4.1
